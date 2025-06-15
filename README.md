@@ -4,7 +4,7 @@
 
 O backend do Trust-me foi migrado com sucesso de NextJS/PostgreSQL para Laravel/MySQL, seguindo fielmente a estrutura do projeto de referência.
 
-## 🚀 O que foi implementado:
+## 🚀 O que foi implementado: ok
 
 ### ✅ Estrutura Base
 - ✅ Projeto Laravel 10.x criado
