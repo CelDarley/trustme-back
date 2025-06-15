@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class,
             TestimonialSeeder::class,
             SiteSettingSeeder::class,
+            ContratoTipoSeeder::class,
+            SeloSeeder::class,
         ]);
     }
 }

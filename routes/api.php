@@ -13,6 +13,8 @@ use App\Http\Controllers\SiteSettingController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\LoginHistoryController;
+use App\Http\Controllers\ContratoTipoController;
+use App\Http\Controllers\SeloController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +91,12 @@ Route::middleware('auth:sanctum')->group(function () {
         // Configurações do site
         Route::apiResource('site-settings', SiteSettingController::class);
         Route::post('/site-settings/bulk-update', [SiteSettingController::class, 'bulkUpdate']);
+
+        // Gestão de Tipos de Contrato
+        Route::apiResource('contrato-tipos', ContratoTipoController::class);
+
+        // Gestão de Selos
+        Route::apiResource('selos', SeloController::class);
     });
 
     // Histórico de Login
