@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
+use App\Models\LoginHistory;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -31,6 +33,14 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Atualiza o histórico de login
+        $loginHistory = LoginHistory::firstOrNew(['user_id' => $user->id]);
+        if (!$loginHistory->first_login_at) {
+            $loginHistory->first_login_at = Carbon::now();
+        }
+        $loginHistory->last_login_at = Carbon::now();
+        $loginHistory->save();
 
         return response()->json([
             'user' => [
@@ -80,7 +90,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        
+
         return response()->json(['message' => 'Logout realizado com sucesso']);
     }
 

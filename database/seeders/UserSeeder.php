@@ -27,5 +27,23 @@ class UserSeeder extends Seeder
             'role' => 'user',
             'email_verified_at' => now(),
         ]);
+
+        // Criar usuário Teste Usuario
+        User::create([
+            'name' => 'Teste Usuario',
+            'email' => 'teste@teste.com',
+            'password' => Hash::make('password123'),
+            'role' => 'user',
+            'email_verified_at' => now(),
+        ]);
+
+        // Criar usuário Darley Dias
+        User::create([
+            'name' => 'Darley Dias',
+            'email' => 'darley@teste.com',
+            'password' => Hash::make('password123'),
+            'role' => 'user',
+            'email_verified_at' => now(),
+        ]);
     }
 }
