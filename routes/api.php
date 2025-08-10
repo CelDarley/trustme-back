@@ -34,6 +34,7 @@ Route::get('/plans/{id}', [PlanController::class, 'show']);
 Route::get('/faqs', [FaqController::class, 'index']);
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::post('/contacts', [ContactController::class, 'store']);
+Route::get('/site-content', [SiteSettingController::class, 'getSiteContent']);
 
 // Rotas públicas de pagamento
 Route::get('/payment/methods', [PaymentController::class, 'getPaymentMethods']);

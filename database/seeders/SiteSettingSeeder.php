@@ -18,11 +18,57 @@ class SiteSettingSeeder extends Seeder
                 'group' => 'general',
             ],
             [
+                'key' => 'site_slogan',
+                'value' => 'Plataforma de Certificação Digital',
+                'type' => 'text',
+                'group' => 'general',
+            ],
+            [
                 'key' => 'site_description',
                 'value' => 'Plataforma de certificação digital e contratos seguros',
                 'type' => 'textarea',
                 'group' => 'general',
             ],
+            
+            // Configurações da tela Home
+            [
+                'key' => 'home.hero_title',
+                'value' => 'Certificação Digital e Contratos Seguros',
+                'type' => 'text',
+                'group' => 'home',
+            ],
+            [
+                'key' => 'home.hero_subtitle',
+                'value' => 'Aumente a confiança dos seus clientes com nossos selos digitais e contratos seguros',
+                'type' => 'textarea',
+                'group' => 'home',
+            ],
+            [
+                'key' => 'home.cta_primary_label',
+                'value' => 'Começar Agora',
+                'type' => 'text',
+                'group' => 'home',
+            ],
+            [
+                'key' => 'home.cta_secondary_label',
+                'value' => 'Ver Planos',
+                'type' => 'text',
+                'group' => 'home',
+            ],
+            [
+                'key' => 'home.cta_block_title',
+                'value' => 'Pronto para Começar?',
+                'type' => 'text',
+                'group' => 'home',
+            ],
+            [
+                'key' => 'home.cta_block_subtitle',
+                'value' => 'Junte-se a milhares de empresas que já confiam no Trust-me',
+                'type' => 'textarea',
+                'group' => 'home',
+            ],
+            
+            // Configurações de contato
             [
                 'key' => 'contact_email',
                 'value' => 'contato@trustme.com',

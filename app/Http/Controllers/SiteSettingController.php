@@ -144,4 +144,92 @@ class SiteSettingController extends Controller
             'message' => 'Configurações atualizadas com sucesso'
         ]);
     }
+
+    public function getSiteContent()
+    {
+        // Buscar todas as configurações do site
+        $settings = SiteSetting::all()->keyBy('key');
+        
+        // Buscar depoimentos ativos
+        $testimonials = \App\Models\Testimonial::where('is_active', true)->get();
+        
+        // Buscar planos ativos
+        $plans = \App\Models\Plan::where('is_active', true)->get();
+        
+        // Buscar FAQs ativas
+        $faqs = \App\Models\Faq::where('is_active', true)->get();
+
+        // Estruturar o conteúdo do site
+        $content = [
+            // Configurações gerais
+            'site_name' => $settings->get('site_name')?->value ?? 'Trust-me',
+            'site_slogan' => $settings->get('site_slogan')?->value ?? 'Plataforma de Certificação Digital',
+            'site_description' => $settings->get('site_description')?->value ?? 'Plataforma de certificação digital e contratos seguros',
+            
+            // Hero Section
+            'home.hero_title' => $settings->get('home.hero_title')?->value ?? 'Certificação Digital e Contratos Seguros',
+            'home.hero_subtitle' => $settings->get('home.hero_subtitle')?->value ?? 'Aumente a confiança dos seus clientes com nossos selos digitais e contratos seguros',
+            'home.cta_primary_label' => $settings->get('home.cta_primary_label')?->value ?? 'Começar Agora',
+            'home.cta_secondary_label' => $settings->get('home.cta_secondary_label')?->value ?? 'Ver Planos',
+            
+            // Features Section
+            'home.features' => [
+                [
+                    'title' => 'Certificação Digital',
+                    'text' => 'Selo de confiança para aumentar a credibilidade da sua empresa'
+                ],
+                [
+                    'title' => 'Contratos Seguros',
+                    'text' => 'Crie e gerencie contratos digitais com assinatura eletrônica'
+                ],
+                [
+                    'title' => 'Suporte Especializado',
+                    'text' => 'Equipe técnica pronta para ajudar em qualquer momento'
+                ]
+            ],
+            
+            // Stats Section
+            'home.stats' => [
+                ['value' => '1000+', 'label' => 'Clientes Atendidos'],
+                ['value' => '5000+', 'label' => 'Documentos Certificados'],
+                ['value' => '99.9%', 'label' => 'Uptime'],
+                ['value' => '24/7', 'label' => 'Suporte']
+            ],
+            
+            // Steps Section
+            'home.steps' => [
+                [
+                    'title' => 'Cadastre-se',
+                    'text' => 'Crie sua conta gratuitamente em menos de 2 minutos'
+                ],
+                [
+                    'title' => 'Escolha seu Plano',
+                    'text' => 'Selecione o plano que melhor atende suas necessidades'
+                ],
+                [
+                    'title' => 'Comece a Usar',
+                    'text' => 'Acesse todas as funcionalidades imediatamente'
+                ]
+            ],
+            
+            // CTA Section
+            'home.cta_block_title' => $settings->get('home.cta_block_title')?->value ?? 'Pronto para Começar?',
+            'home.cta_block_subtitle' => $settings->get('home.cta_block_subtitle')?->value ?? 'Junte-se a milhares de empresas que já confiam no Trust-me',
+            
+            // Dados dinâmicos
+            'testimonials' => $testimonials,
+            'plans' => $plans,
+            'faqs' => $faqs,
+            
+            // Informações de contato
+            'contact_email' => $settings->get('contact_email')?->value ?? 'contato@trustme.com',
+            'contact_phone' => $settings->get('contact_phone')?->value ?? '(11) 99999-9999',
+            'contact_address' => $settings->get('contact_address')?->value ?? 'Rua das Empresas, 123 - São Paulo, SP'
+        ];
+
+        return response()->json([
+            'success' => true,
+            'data' => $content
+        ]);
+    }
 }
