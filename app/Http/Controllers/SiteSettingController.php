@@ -216,6 +216,20 @@ class SiteSettingController extends Controller
             'home.cta_block_title' => $settings->get('home.cta_block_title')?->value ?? 'Pronto para Começar?',
             'home.cta_block_subtitle' => $settings->get('home.cta_block_subtitle')?->value ?? 'Junte-se a milhares de empresas que já confiam no Trust-me',
             
+            // Configurações da página Sobre
+            'about.hero_title' => $settings->get('about.hero_title')?->value ?? 'Sobre o Consentir',
+            'about.hero_subtitle' => $settings->get('about.hero_subtitle')?->value ?? 'Somos uma empresa dedicada a transformar a forma como as equipes colaboram e gerenciam seus projetos, oferecendo soluções inovadoras e confiáveis.',
+            'about.mission_title' => $settings->get('about.mission_title')?->value ?? 'Nossa Missão',
+            'about.mission_text' => $settings->get('about.mission_text')?->value ?? 'Capacitar empresas de todos os tamanhos com ferramentas intuitivas e poderosas que simplificam a gestão de projetos e potencializam a colaboração em equipe.',
+            'about.mission_text_2' => $settings->get('about.mission_text_2')?->value ?? 'Acreditamos que a tecnologia deve ser um facilitador, não um obstáculo. Por isso, desenvolvemos soluções que são ao mesmo tempo sofisticadas e fáceis de usar.',
+            'about.values_title' => $settings->get('about.values_title')?->value ?? 'Nossos Valores',
+            'about.team_title' => $settings->get('about.team_title')?->value ?? 'Nossa Equipe',
+            'about.team_subtitle' => $settings->get('about.team_subtitle')?->value ?? 'Profissionais apaixonados por tecnologia e dedicados a criar as melhores soluções para nossos clientes.',
+            'about.history_title' => $settings->get('about.history_title')?->value ?? 'Nossa História',
+            'about.cta_title' => $settings->get('about.cta_title')?->value ?? 'Faça parte da nossa história',
+            'about.cta_subtitle' => $settings->get('about.cta_subtitle')?->value ?? 'Junte-se a milhares de empresas que já confiam no Consentir para gerenciar seus projetos e alcançar seus objetivos.',
+            'about.cta_button' => $settings->get('about.cta_button')?->value ?? 'Começar Agora',
+            
             // Dados dinâmicos
             'testimonials' => $testimonials,
             'plans' => $plans,
