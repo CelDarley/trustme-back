@@ -47,6 +47,12 @@ class AboutPageSeeder extends Seeder
                 'group' => 'about',
             ],
             [
+                'key' => 'about.values_text',
+                'value' => 'Nossa empresa é fundamentada em valores sólidos que guiam todas as nossas ações e decisões. Acreditamos que a confiança é a base de todos os relacionamentos, a inovação nos impulsiona a buscar soluções melhores, a simplicidade nos permite resolver complexidades de forma clara, e a excelência é nosso compromisso em tudo que fazemos.',
+                'type' => 'textarea',
+                'group' => 'about',
+            ],
+            [
                 'key' => 'about.team_title',
                 'value' => 'Nossa Equipe',
                 'type' => 'text',
@@ -55,6 +61,12 @@ class AboutPageSeeder extends Seeder
             [
                 'key' => 'about.team_subtitle',
                 'value' => 'Profissionais apaixonados por tecnologia e dedicados a criar as melhores soluções para nossos clientes.',
+                'type' => 'textarea',
+                'group' => 'about',
+            ],
+            [
+                'key' => 'about.team_text',
+                'value' => 'Nossa equipe é composta por profissionais experientes e apaixonados por tecnologia. Trabalhamos com metodologias ágeis, sempre focados na qualidade e na experiência do usuário. Cada membro da nossa equipe contribui com sua expertise única para criar soluções inovadoras e eficientes.',
                 'type' => 'textarea',
                 'group' => 'about',
             ],
