@@ -226,6 +226,7 @@ class SiteSettingController extends Controller
             'about.team_title' => $settings->get('about.team_title')?->value ?? 'Nossa Equipe',
             'about.team_subtitle' => $settings->get('about.team_subtitle')?->value ?? 'Profissionais apaixonados por tecnologia e dedicados a criar as melhores soluções para nossos clientes.',
             'about.history_title' => $settings->get('about.history_title')?->value ?? 'Nossa História',
+            'about.history_text' => $settings->get('about.history_text')?->value ?? 'Nossa jornada começou em 2020 com uma visão clara: transformar a forma como as empresas gerenciam projetos e colaboram em equipe.',
             'about.cta_title' => $settings->get('about.cta_title')?->value ?? 'Faça parte da nossa história',
             'about.cta_subtitle' => $settings->get('about.cta_subtitle')?->value ?? 'Junte-se a milhares de empresas que já confiam no Consentir para gerenciar seus projetos e alcançar seus objetivos.',
             'about.cta_button' => $settings->get('about.cta_button')?->value ?? 'Começar Agora',
