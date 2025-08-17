@@ -71,6 +71,45 @@ O backend do Trust-me foi migrado com sucesso de NextJS/PostgreSQL para Laravel/
 - **User:** trustme
 - **Password:** trustme123
 
+### ⚙️ Ambiente (.env)
+
+Crie um arquivo `.env` a partir do exemplo e configure as variáveis essenciais.
+
+Exemplo de variáveis relevantes:
+
+```
+APP_NAME=Trust-me
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8001
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=trustme
+DB_USERNAME=trustme
+DB_PASSWORD=trustme123
+
+SANCTUM_STATEFUL_DOMAINS=localhost:5173,127.0.0.1:5173
+SESSION_DOMAIN=localhost
+
+# Google OAuth
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+# Em desenvolvimento, aponte o redirect para a rota SPA (não /api)
+GOOGLE_REDIRECT_URI=http://localhost:8001/auth/google/callback
+```
+
+Em produção, use:
+
+```
+APP_URL=https://consentir.catenasystem.com.br
+GOOGLE_REDIRECT_URI=https://consentir.catenasystem.com.br/auth/google/callback
+```
+
+- No Google Cloud Console, adicione o mesmo Redirect URI em “Authorized redirect URIs”.
+- O arquivo `.env` de produção NÃO deve ser versionado. Ele é mantido apenas no servidor.
+
 ## 📊 Planos Configurados
 
 1. **Básico:** R$ 29,90/mês - 1 selo + 1 contrato
@@ -90,7 +129,7 @@ O backend do Trust-me foi migrado com sucesso de NextJS/PostgreSQL para Laravel/
 - **API Docs:** `/API-DOCS.md` - Documentação completa das APIs
 - **README:** Este arquivo com instruções
 
-## 🔗 Conectando com Frontend NextJS
+## 🔗 Conectando com Frontend
 
 ```javascript
 // Configuração base
@@ -124,7 +163,7 @@ const getPlans = async (token) => {
 2. Configurar emails
 3. Implementar testes automatizados
 4. Deploy em produção
-5. Conectar frontend NextJS
+5. Conectar frontend
 
 ## ✨ Migração 100% Concluída!
 
