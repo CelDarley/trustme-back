@@ -36,7 +36,7 @@ class Plan extends Model
 
     public function getPriceForCycle($cycle)
     {
-        return match($cycle) {
+        return (double) match($cycle) {
             'monthly' => $this->monthly_price,
             'semiannual' => $this->semiannual_price,
             'annual' => $this->annual_price,

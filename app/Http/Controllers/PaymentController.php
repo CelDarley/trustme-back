@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MercadoPagoService;
 use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -26,38 +27,47 @@ class PaymentController extends Controller
 
         $plan = Plan::find($request->plan_id);
         $amount = $plan->getPriceForCycle($request->billing_cycle);
-        
+
         $cycleName = match($request->billing_cycle) {
             'monthly' => 'Mensal',
             'semiannual' => 'Semestral',
             'annual' => 'Anual',
         };
 
-        // Simulação da criação de preferência do Mercado Pago
-        // Em produção, aqui seria feita a integração real com a API do Mercado Pago
-        $preference = [
-            'id' => 'PREF_' . uniqid(),
-            'init_point' => 'https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=PREF_' . uniqid(),
+        $data = [
             'items' => [
                 [
-                    'title' => "Plano {$plan->name} - {$cycleName}",
+                    'id' => $plan->id,
+                    'title' => $plan->name . ' - ' . $cycleName,
                     'quantity' => 1,
                     'unit_price' => $amount,
-                    'currency_id' => 'BRL',
-                ]
+                    'category_id' => 'software_subscription',
+                ],
             ],
             'back_urls' => [
-                'success' => url('/payment/success'),
-                'failure' => url('/payment/failure'),
-                'pending' => url('/payment/pending'),
+                'success' => route('payment.success'),
+                'failure' => route('payment.failure'),
+                'pending' => route('payment.pending'),
             ],
-            'auto_return' => 'approved',
             'external_reference' => json_encode([
-                'user_id' => $request->user()->id,
                 'plan_id' => $plan->id,
                 'billing_cycle' => $request->billing_cycle,
+                'user_id' => auth()->id()
             ]),
+            'payment_methods' => [
+                'excluded_payment_methods' => [
+                    ['id' => 'ticket'], // Excluir boleto
+                ],
+                'excluded_payment_types' => [
+                    ['id' => 'ticket'], // Excluir boleto
+                ],
+                'installments' => 1, // Pagamento à vista
+            ],
         ];
+
+
+        $service = new MercadoPagoService();
+        $preference = $service->createPreference($data);
 
         return response()->json([
             'success' => true,
@@ -81,11 +91,11 @@ class PaymentController extends Controller
         }
 
         $externalReference = json_decode($request->external_reference, true);
-        
+
         if ($request->status === 'approved') {
             $plan = Plan::find($externalReference['plan_id']);
             $amount = $plan->getPriceForCycle($externalReference['billing_cycle']);
-            
+
             $startDate = Carbon::now();
             $endDate = match($externalReference['billing_cycle']) {
                 'monthly' => $startDate->copy()->addMonth(),
@@ -124,7 +134,7 @@ class PaymentController extends Controller
         // Webhook para receber notificações do Mercado Pago
         // Em produção, aqui seria implementada a lógica para processar
         // as notificações de pagamento do Mercado Pago
-        
+
         \Log::info('Mercado Pago Webhook:', $request->all());
 
         return response()->json(['status' => 'ok']);
@@ -158,5 +168,126 @@ class PaymentController extends Controller
             'success' => true,
             'data' => $methods
         ]);
+    }
+
+
+    public function success(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'payment_id' => 'required|string',
+            'status' => 'required|string',
+            'external_reference' => 'required|string',
+            'merchant_order_id' => 'sometimes|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $externalReference = json_decode($request->external_reference, true);
+
+        if ($request->status === 'approved') {
+            $plan = Plan::find($externalReference['plan_id']);
+            $amount = $plan->getPriceForCycle($externalReference['billing_cycle']);
+
+            $startDate = Carbon::now();
+            $endDate = match($externalReference['billing_cycle']) {
+                'monthly' => $startDate->copy()->addMonth(),
+                'semiannual' => $startDate->copy()->addMonths(6),
+                'annual' => $startDate->copy()->addYear(),
+            };
+
+            $subscription = Subscription::create([
+                'user_id' => $externalReference['user_id'],
+                'plan_id' => $externalReference['plan_id'],
+                'billing_cycle' => $externalReference['billing_cycle'],
+                'amount' => $amount,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'payment_method' => 'mercado_pago',
+                'payment_id' => $request->payment_id,
+                'payment_data' => $request->all(),
+                'status' => 'active',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $subscription,
+                'message' => 'Pagamento processado com sucesso'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Pagamento não aprovado',
+            'request' => $request->all()
+        ], 400);
+    }
+
+    public function failure(Request $request)
+    {
+        return response()->json([
+            'success' => false,
+            'message' => 'Pagamento não processado'
+        ], 500);
+    }
+
+    public function pending(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'payment_id' => 'required|string',
+            'status' => 'required|string',
+            'external_reference' => 'required|string',
+            'merchant_order_id' => 'sometimes|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $externalReference = json_decode($request->external_reference, true);
+
+        if ($request->status === 'pending') {
+            $plan = Plan::find($externalReference['plan_id']);
+            $amount = $plan->getPriceForCycle($externalReference['billing_cycle']);
+
+            $startDate = Carbon::now();
+            $endDate = match($externalReference['billing_cycle']) {
+                'monthly' => $startDate->copy()->addMonth(),
+                'semiannual' => $startDate->copy()->addMonths(6),
+                'annual' => $startDate->copy()->addYear(),
+            };
+
+            $subscription = Subscription::create([
+                'user_id' => $externalReference['user_id'],
+                'plan_id' => $externalReference['plan_id'],
+                'billing_cycle' => $externalReference['billing_cycle'],
+                'amount' => $amount,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+                'payment_method' => 'mercado_pago',
+                'payment_id' => $request->payment_id,
+                'payment_data' => $request->all(),
+                'status' => 'active',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'data' => $subscription,
+                'message' => 'Pagamento pendente'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Pagamento pendente'
+        ], 400);
+
     }
 }

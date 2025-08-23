@@ -111,6 +111,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/login-history/all', [LoginHistoryController::class, 'getAllUsersLoginHistory'])->middleware('check.admin');
 });
 
+/**
+ * Rotas de callback do Mercado Pago
+ */
+// Rota para sucesso no pagamento
+Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
+
+// Rota para falha no pagamento
+Route::get('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');
+
+// Rota para pagamento pendente
+Route::get('/payment/pending', [PaymentController::class, 'pending'])->name('payment.pending');
+
+
+
 // Middleware para verificar se é admin
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/check-admin', function (Request $request) {
