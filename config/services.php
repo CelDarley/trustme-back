@@ -39,6 +39,11 @@ return [
 
     'mercadopago' => [
         'access_token' => env('MERCADOPAGO_ACCESS_TOKEN'),
+        'back_urls' => [
+            'success' => getenv('MERCADOPAGO_WEBHOOK_SUCCESS', 'https://consentir.catenasystem.com.br/api/payment/success'),
+            'failure' => getenv('MERCADOPAGO_WEBHOOK_FAILURE', 'https://consentir.catenasystem.com.br/api/payment/failure'),
+            'pending' => getenv('MERCADOPAGO_WEBHOOK_PENDING', 'https://consentir.catenasystem.com.br/api/payment/pending'),
+        ],
     ]
 
 ];
