@@ -49,7 +49,7 @@ class PaymentController extends Controller
             //     'failure' => route('payment.failure'),
             //     'pending' => route('payment.pending'),
             // ],
-            'auto_return' => 'approved',
+            'auto_return' => 'all',
             'back_urls' => [
                 'success' => 'https://consentir.catenasystem.com.br/api/payment/success',
                 'failure' => 'https://consentir.catenasystem.com.br/api/payment/failure',
@@ -229,10 +229,6 @@ class PaymentController extends Controller
     public function failure(Request $request)
     {
         return redirect()->away('/payment/failure')->with('failure', 'Pagamento não processado');
-        // return response()->json([
-        //     'success' => false,
-        //     'message' => 'Pagamento não processado'
-        // ], 500);
     }
 
     public function pending(Request $request)
