@@ -44,10 +44,16 @@ class PaymentController extends Controller
                     'category_id' => 'software_subscription',
                 ],
             ],
+            // 'back_urls' => [
+            //     'success' => route('payment.success'),
+            //     'failure' => route('payment.failure'),
+            //     'pending' => route('payment.pending'),
+            // ],
+            'auto_return' => 'approved',
             'back_urls' => [
-                'success' => route('payment.success'),
-                'failure' => route('payment.failure'),
-                'pending' => route('payment.pending'),
+                'success' => 'https://consentir.catenasystem.com.br/api/payment/success',
+                'failure' => 'https://consentir.catenasystem.com.br/api/payment/failure',
+                'pending' => 'https://consentir.catenasystem.com.br/api/payment/pending',
             ],
             'external_reference' => json_encode([
                 'plan_id' => $plan->id,
@@ -213,26 +219,20 @@ class PaymentController extends Controller
                 'status' => 'active',
             ]);
 
-            return response()->json([
-                'success' => true,
-                'data' => $subscription,
-                'message' => 'Pagamento processado com sucesso'
-            ]);
+            return redirect()->away('/payment/success')->with('success', 'Pagamento processado com sucesso');
+
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Pagamento não aprovado',
-            'request' => $request->all()
-        ], 400);
+        return redirect()->away('/payment/failure')->with('failure', 'Pagamento não processado');
     }
 
     public function failure(Request $request)
     {
-        return response()->json([
-            'success' => false,
-            'message' => 'Pagamento não processado'
-        ], 500);
+        return redirect()->away('/payment/failure')->with('failure', 'Pagamento não processado');
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => 'Pagamento não processado'
+        // ], 500);
     }
 
     public function pending(Request $request)
@@ -277,17 +277,20 @@ class PaymentController extends Controller
                 'status' => 'active',
             ]);
 
-            return response()->json([
-                'success' => true,
-                'data' => $subscription,
-                'message' => 'Pagamento pendente'
-            ]);
+            // return response()->json([
+            //     'success' => true,
+            //     'data' => $subscription,
+            //     'message' => 'Pagamento pendente'
+            // ]);
+            return redirect()->away('/payment/pending')->with('pending', 'Pagamento pendente');
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Pagamento pendente'
-        ], 400);
+        return redirect()->away('/payment/pending')->with('pending', 'Pagamento pendente');
+
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => 'Pagamento pendente'
+        // ], 400);
 
     }
 }
