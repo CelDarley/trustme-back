@@ -98,6 +98,11 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 # Em desenvolvimento, aponte o redirect para a rota SPA (não /api)
 GOOGLE_REDIRECT_URI=http://localhost:8001/auth/google/callback
+
+MERCADOPAGO_ACCESS_TOKEN=APP_USR-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+MERCADOPAGO_WEBHOOK_SUCCESS=https://consentir.catenasystem.com.br/api/payment/success
+MERCADOPAGO_WEBHOOK_FAILURE=https://consentir.catenasystem.com.br/api/payment/failure
+MERCADOPAGO_WEBHOOK_PENDING=https://consentir.catenasystem.com.br/api/payment/pending
 ```
 
 Em produção, use:

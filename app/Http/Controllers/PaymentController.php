@@ -51,9 +51,9 @@ class PaymentController extends Controller
             // ],
             'auto_return' => 'all',
             'back_urls' => [
-                'success' => 'https://consentir.catenasystem.com.br/api/payment/success',
-                'failure' => 'https://consentir.catenasystem.com.br/api/payment/failure',
-                'pending' => 'https://consentir.catenasystem.com.br/api/payment/pending',
+                'success' => getenv('MERCADOPAGO_WEBHOOK_SUCCESS', 'https://consentir.catenasystem.com.br/api/payment/success'),
+                'failure' => getenv('MERCADOPAGO_WEBHOOK_FAILURE', 'https://consentir.catenasystem.com.br/api/payment/failure'),
+                'pending' => getenv('MERCADOPAGO_WEBHOOK_PENDING', 'https://consentir.catenasystem.com.br/api/payment/pending'),
             ],
             'external_reference' => json_encode([
                 'plan_id' => $plan->id,
