@@ -123,6 +123,8 @@ class SiteSettingController extends Controller
             'settings' => 'required|array',
             'settings.*.key' => 'required|string',
             'settings.*.value' => 'nullable|string',
+            'settings.*.type' => 'nullable|in:text,textarea,boolean,json',
+            'settings.*.group' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -133,9 +135,27 @@ class SiteSettingController extends Controller
         }
 
         foreach ($request->settings as $settingData) {
+            // Definir tipo e grupo padrão baseado na chave
+            $type = $settingData['type'] ?? 'text';
+            $group = $settingData['group'] ?? 'general';
+            
+            // Auto-detectar tipo baseado na chave
+            if (str_contains($settingData['key'], 'address') || str_contains($settingData['key'], 'hours')) {
+                $type = 'textarea';
+            }
+            
+            // Auto-detectar grupo baseado na chave
+            if (str_starts_with($settingData['key'], 'contact_')) {
+                $group = 'contact';
+            }
+
             SiteSetting::updateOrCreate(
                 ['key' => $settingData['key']],
-                ['value' => $settingData['value']]
+                [
+                    'value' => $settingData['value'] ?? '',
+                    'type' => $type,
+                    'group' => $group
+                ]
             );
         }
 
@@ -250,7 +270,14 @@ class SiteSettingController extends Controller
             // Informações de contato
             'contact_email' => $settings->get('contact_email')?->value ?? 'contato@trustme.com',
             'contact_phone' => $settings->get('contact_phone')?->value ?? '(11) 99999-9999',
-            'contact_address' => $settings->get('contact_address')?->value ?? 'Rua das Empresas, 123 - São Paulo, SP'
+            'contact_address' => $settings->get('contact_address')?->value ?? 'Rua das Empresas, 123 - São Paulo, SP',
+            
+            // Novas configurações de contato dinâmicas
+            'contact_email_primary' => $settings->get('contact_email_primary')?->value ?? 'contato@trustme.com',
+            'contact_email_support' => $settings->get('contact_email_support')?->value ?? 'suporte@trustme.com',
+            'contact_phone_primary' => $settings->get('contact_phone_primary')?->value ?? '(11) 99999-9999',
+            'contact_phone_secondary' => $settings->get('contact_phone_secondary')?->value ?? '(11) 3333-4444',
+            'contact_hours' => $settings->get('contact_hours')?->value ?? 'Segunda a Sexta: 9h às 18h\nSábado: 9h às 12h\nDomingo: Fechado'
         ];
 
         return response()->json([

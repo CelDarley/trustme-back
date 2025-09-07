@@ -59,6 +59,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Assinaturas do usuário
     Route::get('/user/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
+    Route::put('/user/subscriptions/{id}/cancel', [SubscriptionController::class, 'cancelUserSubscription']);
+    Route::post('/user/subscriptions/compare-plan-change', [SubscriptionController::class, 'comparePlanChange']);
+    Route::put('/user/subscriptions/change-plan', [SubscriptionController::class, 'changePlan']);
 
     // Pagamentos
     Route::post('/payment/create-preference', [PaymentController::class, 'createPreference']);

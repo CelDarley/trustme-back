@@ -146,6 +146,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'string|max:255',
             'email' => 'string|email|max:255|unique:users,email,' . $user->id,
+            'current_password' => 'nullable|string|required_with:password',
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
@@ -154,6 +155,23 @@ class UserController extends Controller
                 'success' => false,
                 'errors' => $validator->errors()
             ], 422);
+        }
+
+        // Se está tentando alterar a senha, validar a senha atual
+        if ($request->password) {
+            if (!$request->current_password) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Senha atual é obrigatória para alterar a senha'
+                ], 422);
+            }
+
+            if (!Hash::check($request->current_password, $user->password)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Senha atual incorreta'
+                ], 422);
+            }
         }
 
         $data = $request->only(['name', 'email']);
